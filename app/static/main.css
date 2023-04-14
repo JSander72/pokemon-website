@@ -1,3 +1,20 @@
+.signup {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: max-content;
+}
+
+.signup > form > input {
+    margin: 10px;
+}
+
+#signuptitle {
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(to right, rgb(222, 105, 103),rgb(237,36,34), rgb(222, 105, 103));
+}
+
 .poke_container {
     display: flex;
     justify-content: center;
@@ -7,7 +24,8 @@
 
 .pokecard {
     display: flex;
-    justify-content: center;    
+    justify-content: space-around;
+    flex-direction:;
 }
 
 .card {

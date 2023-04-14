@@ -1,9 +1,9 @@
 from flask import redirect, render_template, request, url_for
 from app import app
-from .forms import PokeDex
+from .forms import PokeDex, SignUpForm
 import requests as r
+from .models import User
 
-@app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -32,7 +32,7 @@ def poke():
                             "poke_id": data['id'],
                             "name": data['name'].title(),
                             "ability1":data['abilities'][0]["ability"]["name"],
-                            "ability2":data['abilities'][1]["ability"]["name"],
+                            "ability2": data['abilities'][1]["ability"]["name"] if len(data['abilities']) >= 2 else "" ,
                             "base experience":data['base_experience'],
                             "photo":data['sprites']['other']['home']["front_default"],
                             "attack base stat": data['stats'][1]['base_stat'],
@@ -47,3 +47,23 @@ def poke():
 
     return render_template('pokedex.html', form=form)
 
+@app.route('/signup', methods=["GET", "POST"])
+def signUp():
+    form = SignUpForm()
+    if request.method == 'POST':
+        if form.validate():
+            username = form.username.data
+            password = form.password.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
+            email = form.email.data
+            
+            #add user to database
+            user = User(username, password, first_name, last_name, email)
+            print(user)
+            user.saveToDB()
+            print(user)
+            return redirect(url_for('poke'))
+
+
+    return render_template('signup.html', form = form)
