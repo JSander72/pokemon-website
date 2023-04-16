@@ -43,8 +43,6 @@ def loginPage():
                     print('invalid password')
             else:
                 print('incorrect username or password')
-    print("We've made it here")
-
 
     return render_template('login.html', form = form)
 
