@@ -6,11 +6,10 @@ class PokeDex(FlaskForm):
     pokereq = StringField('pokereq')
     submit = SubmitField()
 
-class SignUpForm(FlaskForm):
+
+
+
+class LogIn(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired()])
-    first_name = StringField('First Name')
-    last_name = StringField('Last Name')
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField()

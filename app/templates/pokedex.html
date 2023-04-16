@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<h1 style="display: flex; justify-content: center; background-image: linear-gradient(to right, rgb(222, 105, 103),rgb(237,36,34), rgb(222, 105, 103));">Pokédex</h1>
+<h1 id="signuptitle">Pokédex</h1>
 
 <div class="poke_container">
 
   <div class="form-floating mb-3">
     <form method="POST" style="display: flex; justify-content: center;">
       {{ form.hidden_tag() }}
-      <p>{{ form.pokereq(class='form-control', placeholder='Pokémon name or #') }}
+      <p>{{ form.pokereq(class='form-control', placeholder='Pokémon name or #') }}</p>
       <p></p>
-      <p>{{ form.submit(class='btn btn-primary') }}
+      <p>{{ form.submit(class='btn btn-primary') }}</p>
     </form>
   </div>
 
@@ -29,12 +29,15 @@
     <p style="margin-right: 0;">HP <p style="font-weight: 800;">{{poke_dict["hp base stat"]}}</p></p>
     </div>
     <img src="{{poke_dict['photo']}}" class="card-img-top pokeimage" alt="{{poke_dict['name']|capitalize}}" style="width:250px; height: 230px;">
-    <div class="card-body" style=" padding: 8px; padding-bottom: 0;">
+    <div class="card-body cardstats" style=" padding: 8px; padding-bottom: 0;">
       <div class="cardstats" style="display: flex; justify-content: space-between;">
         <p class="card-text" style="font-weight: 800;">Pokémon #{{poke_dict["poke_id"]}}</p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p>
         <p>ATK <p style="font-weight: 800;">{{poke_dict['attack base stat']}}</p></p>
         <p></p>
         <p>DEF <p style="font-weight: 800;">{{poke_dict['defense stat']}}</p></p>
+      </div>
+      <div style="padding: 0px; margin: 0px; font-size: small;">
+        <h9 style="padding: 0px; margin: 0px;">{{poke_dict['type1']|capitalize}} {% if poke_dict['type2'] %}  / {{poke_dict['type2']|capitalize}} {% endif %}</h9>
       </div>
     </div>
     <ul class="list-group list-group-flush" style="">
@@ -43,7 +46,7 @@
       <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">{{poke_dict['ability2']|capitalize}}</li>
     </ul>
     <div class="card-body" >
-      <a href="#" class="card-link">Capture</a>
+      <button method="POST" type="button" class="btn btn-secondary">Submit</button>
       <a href="#" class="card-link">Another link</a>
     </div>
   </div>
