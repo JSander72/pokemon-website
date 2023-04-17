@@ -26,6 +26,10 @@ class User(db.Model, UserMixin):
         db.session.add(self)
         db.session.commit()
 
+    def deleteFromDB(self):
+        db.session.delete(self)
+        db.session.commit()
+
 class Pokemon(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True, autoincrement = False)
     name = db.Column(db.String(20))

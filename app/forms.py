@@ -7,8 +7,6 @@ class PokeDex(FlaskForm):
     submit = SubmitField()
 
 
-
-
 class LogIn(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])

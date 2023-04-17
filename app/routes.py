@@ -81,4 +81,7 @@ def capture(capture_poke):
         print(f'Succesfully stored {pokemon}!')
         pass
 
+@app.route('/profile')
+def profilePage():
+    return render_template('profile.html')
 

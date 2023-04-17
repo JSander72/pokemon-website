@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from .forms import LogIn, SignUpForm
 from ..models import User
-from flask_login import login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required
 
 auth = Blueprint('auth', __name__, template_folder='auth_templates')
 
@@ -21,7 +21,7 @@ def signUp():
             print(user)
             user.saveToDB()
             print(user)
-            return redirect(url_for('auth.poke'))
+            return redirect(url_for('auth.loginPage'))
 
     return render_template('signup.html', form = form)
 
@@ -38,7 +38,7 @@ def loginPage():
                 # verify password
                 if user.password == password:
                     login_user(user)
-                    return redirect(url_for('auth.index'))
+                    return redirect(url_for('index'))
                 else:
                     print('invalid password')
             else:
@@ -50,4 +50,18 @@ def loginPage():
 @login_required
 def logMeOut():
     logout_user()
-    return redirect(url_for('loginPage'))
+    return redirect(url_for('auth.loginPage'))
+
+@auth.route('/profile')
+def profilePage():
+
+    return render_template('profile.html')
+
+@auth.route('/deleteme', methods=["GET"])
+@login_required
+def deleteUser():
+
+    user = User.query.get_or_404(current_user.id)
+    user.deleteFromDB()
+    print("Delete user successful!!")
+    return redirect(url_for('index'))
