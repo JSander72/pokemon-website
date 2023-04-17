@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, session, url_for
 from app import app
 from .forms import PokeDex
 import requests as r
@@ -42,7 +42,7 @@ def poke():
                                 "defense stat":data['stats'][2]["base_stat"],
                                 "type1":data['types'][0]["type"]['name'],
                                 "type2": data['types'][1]["type"]['name'] if len(data['types']) >= 2 else ""}
-                        capture_poke = poke_dict
+                        session['poke_dict'] =  poke_dict
 
                     except:
                         print('An empty form was submitted!')
@@ -53,33 +53,40 @@ def poke():
                 print("Error with pokemon.ok")
                 return render_template('pokedex.html', form=form)
 
-
     return render_template('pokedex.html', form=form)
 
 
 @app.route('/capture', methods=("GET", "POST"))
 @login_required
-def capture(capture_poke):
+def capture():
     print("we made it to the capture function")
-    if request.method == 'POST':
-        print("We also made it to the actual POST method")
-        id = capture_poke['poke_id']
-        name = capture_poke['name']
-        attack = capture_poke['attack base stat']
-        defense = capture_poke['defense stat']
-        hp = capture_poke['hp base stat']
-        exp = capture_poke['base experience']
-        type1 = capture_poke['type1']
-        type2 = capture_poke['type2']
-        poke_img = capture_poke['photo']
+    poke_dict = session.get('poke_dict', None)
+    print("We have the poke_dict variable in capture()")
+    if poke_dict is None:
+        print('Something is wrong with session.get("poke_dict")')
+        return redirect(url_for('poke'))
+    
+    elif poke_dict != None:
+        print("We are successfully using the poke_dict in the capture function")
+        id = poke_dict['poke_id']
+        name = poke_dict['name']
+        attack = poke_dict['attack base stat']
+        defense = poke_dict['defense stat']
+        hp = poke_dict['hp base stat']
+        exp = poke_dict['base experience']
+        type1 = poke_dict['type1']
+        type2 = poke_dict['type2']
+        poke_img = poke_dict['photo']
 
 
         #add upokemon to database
         pokemon = Pokemon(id, name, attack, defense, hp , exp, type1, type2, poke_img)
         print(pokemon)
         pokemon.saveToDB()
-        print(f'Succesfully stored {pokemon}!')
-        pass
+        print(f'Succesfully stored {name}!')
+        return redirect(url_for('poke'))
+    else:
+        print('Something is still not right')
 
 @app.route('/profile')
 def profilePage():

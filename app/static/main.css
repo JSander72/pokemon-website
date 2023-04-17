@@ -1,4 +1,15 @@
 
+
+.navlinks > li > a {
+    color: rgb(255, 253, 140);
+    font-family: 'Acme', sans-serif;
+}
+
+.navlinks > li > a:hover {
+    color: black;
+}
+
+
 .signup {
     display: flex;
     justify-content: center;
@@ -13,20 +24,20 @@
 #signuptitle {
     display: flex;
     justify-content: center;
-    background-image: linear-gradient(to right, rgb(222, 105, 103),rgb(237,36,34), rgb(222, 105, 103));
+    background-image: linear-gradient(to right, rgb(237,36,34), rgb(222, 105, 103), rgb(222, 105, 103), rgb(237,36,34));
 }
 
 .poke_container {
     display: flex;
     justify-content: center;
-    padding-top: 3rem;
-    
+    padding-top: 3rem;;
 }
 
 .pokecard {
     display: flex;
     justify-content: space-around;
     flex-direction:;
+
 }
 
 .card {
@@ -59,15 +70,18 @@
     margin-left: 5%;
     margin-right: 5%;
     margin-top: 2%;
-
+    font-family: 'Rajdhani', sans-serif;
+    font-size:;
 }
 
 .cardstats > p {
     margin-bottom: 0%;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 .list-group > li {
     background: rgba(0,0,0,0);
+    font-family: 'Rajdhani', sans-serif;
 }
 
 

@@ -36,7 +36,7 @@
         <p></p>
         <p>DEF <p style="font-weight: 800;">{{poke_dict['defense stat']}}</p></p>
       </div>
-      <div style="padding: 0px; margin: 0px; font-size: small;">
+      <div class="cardstats" style="padding: 0px; margin: 0px; font-size: small;">
         <h9 style="padding: 0px; margin: 0px;">{{poke_dict['type1']|capitalize}} {% if poke_dict['type2'] %}  / {{poke_dict['type2']|capitalize}} {% endif %}</h9>
       </div>
     </div>
@@ -46,7 +46,7 @@
       <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">{{poke_dict['ability2']|capitalize}}</li>
     </ul>
     <div class="card-body" >
-      <button method="POST" type="button" class="btn btn-secondary">Submit</button>
+      <a method="POST" type="button" class="btn btn-secondary" href="/capture">Capture</a>
       <a href="#" class="card-link">Another link</a>
     </div>
   </div>

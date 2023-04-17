@@ -55,3 +55,23 @@ class Pokemon(db.Model, UserMixin):
     def saveToDB(self):
         db.session.add(self)
         db.session.commit()
+
+class Teams(db.Model, UserMixin):
+    team_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    poke_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable = False)
+    team_name = db.Column(db.String(50), nullable = False)
+
+    def __init__(self, team_id, user_id, poke_id, team_name):
+        self.team_id = team_id
+        self.user_id = user_id
+        self.poke_id = poke_id
+        self.team_name = team_name
+
+    def saveToDB(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def deleteFromDB(self):
+        db.session.delete(self)
+        db.session.commit()
