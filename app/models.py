@@ -111,7 +111,6 @@ class TeamPokemon(db.Model):
     team_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False, autoincrement = False)
 
     def __init__(self, user_id, team_id):
-        self.id = id
         self.user_id = user_id
         self.team_id = team_id
 
