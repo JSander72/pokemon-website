@@ -37,8 +37,7 @@
 .pokecard {
     display: flex;
     justify-content: space-around;
-    flex-direction:;
-
+    flex-wrap: wrap;
 }
 
 .card {
@@ -83,6 +82,14 @@
 .list-group > li {
     background: rgba(0,0,0,0);
     font-family: 'Rajdhani', sans-serif;
+}
+
+.release {
+    background-color: rgb(237,36,34);
+}
+
+.release:hover {
+    background-color: rgb(196, 29, 26);
 }
 
 

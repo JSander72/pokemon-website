@@ -88,18 +88,18 @@ def capture():
         existing_pokemon = Pokemon.query.filter_by(id=id).first()
         if existing_pokemon is None:
             pokemon.saveToDB()
-            flash(f'Succesfully stored {name}!', 'success')
+            print(f'Succesfully stored {name}!')
 
             #store pokemon in mypokemon
             to_capture = MyPokemon(current_user.id, id )
             print(to_capture)
             to_capture.saveToDB()
-            print(f'You captured {name}!!')
+            flash(f'You captured {name}!!', 'success')
         else:
             to_capture = MyPokemon(current_user.id, id )
             print(f"to_capture already in Pokemon table")
             to_capture.saveToDB()
-            print(f'You captured {name}!!')
+            flash(f'You captured {name}!!', 'success')
 
         return redirect(url_for('poke'))
     else:

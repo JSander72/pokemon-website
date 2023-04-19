@@ -124,3 +124,15 @@ class TeamPokemon(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+
+# from app import db
+# from app.models import Pokemon, MyPokemon
+
+# # Delete all records in the "my_pokemon" table
+# MyPokemon.query.delete()
+
+# # Delete all records in the "pokemon" table
+# Pokemon.query.delete()
+
+# # Commit the changes to the database
+# db.session.commit()

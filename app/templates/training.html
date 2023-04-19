@@ -8,11 +8,9 @@
 <p style="font-size:large;">Organize your pokemon into teams for battle!</p>
 </div>
 
-<div style="display: flex;">
+<div style="display: flex; flex-wrap: wrap-reverse; justify-content: center;">
 {% for pokemon in mypokemons %}
-
-
-<div class="pokecard">
+<div class="pokecard" style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px;">
     <div class="card" style="width: 18rem; ">
       <div class="card_top">
         <h5 class="card-title" style="font-weight: 800;">{{pokemon.captured['name']|capitalize}}</h5>
@@ -57,10 +55,12 @@
         <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">
           {{pokemon.captured['ability2']|capitalize}}</li>
       </ul>
+      <div class="card-body" style="display: flex; justify-content:space-around;">
+        <a href="#" style="height: max-content;" method="POST" type="button" class="btn btn-secondary release">Release</a>
+        <a href="#" style="height: max-content;" type="button" class="btn btn-secondary">Add to team</a>
+      </div>
     </div>
   </div>
-
-
 {% endfor %}
 </div>
 
