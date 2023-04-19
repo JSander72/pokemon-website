@@ -1,9 +1,13 @@
-from flask import redirect, render_template, request, session, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from app import app
 from .forms import PokeDex
 import requests as r
-from .models import Pokemon
-from flask_login import login_required
+from .models import MyPokemon, Pokemon, TeamPokemon, Teams, User
+from flask_login import login_required, current_user
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/index')
 def index():
@@ -59,15 +63,13 @@ def poke():
 @app.route('/capture', methods=("GET", "POST"))
 @login_required
 def capture():
-    print("we made it to the capture function")
     poke_dict = session.get('poke_dict', None)
-    print("We have the poke_dict variable in capture()")
+
     if poke_dict is None:
         print('Something is wrong with session.get("poke_dict")')
         return redirect(url_for('poke'))
     
     elif poke_dict != None:
-        print("We are successfully using the poke_dict in the capture function")
         id = poke_dict['poke_id']
         name = poke_dict['name']
         attack = poke_dict['attack base stat']
@@ -77,18 +79,36 @@ def capture():
         type1 = poke_dict['type1']
         type2 = poke_dict['type2']
         poke_img = poke_dict['photo']
+        ability1 = poke_dict['ability1']
+        ability2 = poke_dict['ability2']
 
+        #add pokemon to database
 
-        #add upokemon to database
-        pokemon = Pokemon(id, name, attack, defense, hp , exp, type1, type2, poke_img)
-        print(pokemon)
-        pokemon.saveToDB()
-        print(f'Succesfully stored {name}!')
+        pokemon = Pokemon(id, name, attack, defense, hp , exp, type1, type2, poke_img, ability1, ability2)
+        existing_pokemon = Pokemon.query.filter_by(id=id).first()
+        if existing_pokemon is None:
+            pokemon.saveToDB()
+            flash(f'Succesfully stored {name}!', 'success')
+
+            #store pokemon in mypokemon
+            to_capture = MyPokemon(current_user.id, id )
+            print(to_capture)
+            to_capture.saveToDB()
+            print(f'You captured {name}!!')
+        else:
+            to_capture = MyPokemon(current_user.id, id )
+            print(f"to_capture already in Pokemon table")
+            to_capture.saveToDB()
+            print(f'You captured {name}!!')
+
         return redirect(url_for('poke'))
     else:
         print('Something is still not right')
 
-@app.route('/profile')
-def profilePage():
-    return render_template('profile.html')
 
+@app.route('/training')
+@login_required
+def pokeTeams():
+    user = User.query.filter_by(id=current_user.id).first()
+    mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
+    return render_template('training.html', mypokemons=mypokemons)

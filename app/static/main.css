@@ -3,6 +3,7 @@
 .navlinks > li > a {
     color: rgb(255, 253, 140);
     font-family: 'Acme', sans-serif;
+    font-size: larger;
 }
 
 .navlinks > li > a:hover {

@@ -1,6 +1,6 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, get_flashed_messages, redirect, render_template, request, url_for
 from .forms import LogIn, SignUpForm
-from ..models import User
+from ..models import User, Pokemon
 from flask_login import current_user, login_user, logout_user, login_required
 
 auth = Blueprint('auth', __name__, template_folder='auth_templates')
@@ -15,7 +15,8 @@ def signUp():
             first_name = form.first_name.data
             last_name = form.last_name.data
             email = form.email.data
-            
+            #add flash message her for when user already exists
+            #if User 
             #add user to database
             user = User(username, password, first_name, last_name, email)
             print(user)
@@ -50,12 +51,13 @@ def loginPage():
 @login_required
 def logMeOut():
     logout_user()
+    flash("You've successfully been logged out!", 'success')
     return redirect(url_for('auth.loginPage'))
 
-@auth.route('/profile')
+@auth.route('/myaccount')
 def profilePage():
 
-    return render_template('profile.html')
+    return render_template('myaccount.html')
 
 @auth.route('/deleteme', methods=["GET"])
 @login_required
@@ -63,5 +65,15 @@ def deleteUser():
 
     user = User.query.get_or_404(current_user.id)
     user.deleteFromDB()
-    print("Delete user successful!!")
+    flash("Delete user successful!!", 'success')
+    return redirect(url_for('index'))
+
+@auth.route('/deleteme', methods=["GET"]) #Just for me to get rid of pokemon
+def deletePokemon():
+    # query all pokemon and delete them
+    Pokemon.query.delete()
+    
+    # commit the changes to the database
+    db.session.commit()
+
     return redirect(url_for('index'))
