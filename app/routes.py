@@ -112,3 +112,19 @@ def pokeTeams():
     user = User.query.filter_by(id=current_user.id).first()
     mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
     return render_template('training.html', mypokemons=mypokemons)
+
+@app.route('/traning/release/<int:id>', methods=['GET'])
+@login_required
+def releasePokemon(id):
+    pokemon = MyPokemon.query.get(id)
+    pokemon.deleteFromDB()
+    flash("Pokemon successfully released!", "success")
+    return redirect(url_for('pokeTeams'))
+
+@app.route('/training/createteam', methods=["POST"])
+def newTeam():
+    teamname = request.form['teamname']
+    newteam = Teams(current_user.id, teamname)
+    newteam.saveToDB()
+    flash(f"{newteam} has been created!", 'success')
+    return redirect('/training')

@@ -70,11 +70,10 @@ class Pokemon(db.Model):
 class Teams(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False, autoincrement = False)
-    poke_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable = False, autoincrement = False)
+    #poke_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable = False, autoincrement = False)
     team_name = db.Column(db.String(50), nullable = False)
 
-    def __init__(self, id, user_id, team_name):
-        self.id = id
+    def __init__(self, user_id, team_name):
         self.user_id = user_id
         self.team_name = team_name
 
