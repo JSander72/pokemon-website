@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
         db.session.commit()
 
 class Pokemon(db.Model):
-    id = db.Column(db.Integer, primary_key = True, autoincrement = False)
+    id = db.Column(db.Integer, primary_key = True, autoincrement = False, unique=True)
     name = db.Column(db.String(20))
     attack = db.Column(db.Integer, autoincrement = False)
     defense = db.Column(db.Integer, autoincrement = False)
@@ -70,7 +70,6 @@ class Pokemon(db.Model):
 class Teams(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False, autoincrement = False)
-    #poke_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable = False, autoincrement = False)
     team_name = db.Column(db.String(50), nullable = False)
 
     def __init__(self, user_id, team_name):
@@ -108,11 +107,15 @@ class MyPokemon(db.Model):
 class TeamPokemon(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     poke_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable = False, autoincrement = False)
-    team_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False, autoincrement = False)
+    team_id = db.Column(db.Integer, db.ForeignKey('teams.id'), nullable = False, autoincrement = False)
+    mypoke_id = db.Column(db.Integer, db.ForeignKey('my_pokemon.id', ondelete='CASCADE'), nullable = False, autoincrement = False, unique=True)
+    pokemon = db.relationship('Pokemon')
 
-    def __init__(self, user_id, team_id):
-        self.user_id = user_id
+
+    def __init__(self, poke_id, team_id, mypoke_id):
+        self.poke_id = poke_id
         self.team_id = team_id
+        self.mypoke_id = mypoke_id
 
     def saveToDB(self):
         db.session.add(self)

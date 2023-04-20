@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 id="signuptitle">Pokemon Training Gym</h1>
+<div style="display: flex; align-items: center; flex-direction: column; padding-bottom: 50px;">
+    <p></p>
+    <p style="font-size:large;">This is {{ teamname.team_name }}!</p>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          My Teams
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            {% for team in myteams %}
+                <li><a class="dropdown-item" href="/training/viewteam/{{ team.id }}">{{team.team_name}}</a></li>
+            {% endfor %}
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="/training">View All Pokemon</a></li>
+          <li><a class="dropdown-item btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#newteammodal">Create a New Team</a></li>
+        </ul>
+      </div>
+</div>
+
+<!-- New Team Model -->
+<div class="modal" tabindex="-1" id="newteammodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('newTeam') }}" method="POST">
+                <div class="modal-body">
+                    <input class="form-control form-control-lg" type="text" placeholder="New team name" name="teamname"
+                        aria-label=".form-control-lg example" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div style="display: flex; flex-wrap: wrap-reverse; justify-content: center;">
+    {% for pokemon in teampokemon %}
+    <div class="pokecard" style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px;">
+        <div class="card" style="width: 18rem; ">
+            <div class="card_top">
+                <h5 class="card-title" style="font-weight: 800;">{{pokemon.pokemon['name']|capitalize}}</h5>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p style="font-size: small;">EXP</p>
+                <p style="font-weight: 800;">{{pokemon.pokemon["exp"]}}</p>
+                <p></p>
+                <p style="margin-right: 0; font-size: small;">HP
+                <p style="font-weight: 800;">{{pokemon.pokemon["hp"]}}</p>
+                </p>
+            </div>
+            <img src="{{pokemon.pokemon['poke_img']}}" class="card-img-top pokeimage"
+                alt="{{pokemon.pokemon['name']|capitalize}}" style="width:250px; height: 230px;">
+            <div class="card-body cardstats" style=" padding: 8px; padding-bottom: 0;">
+                <div class="cardstats" style="display: flex; justify-content: space-between;">
+                    <p class="card-text" style="font-weight: 800;">Pokémon #{{pokemon["poke_id"]}}</p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p style="font-size: small;">ATK</p>
+                    <p style="font-weight: 800;">{{pokemon.pokemon['attack']}}</p>
+                    <p></p>
+                    <p style="font-size: small;">DEF</p>
+                    <p style="font-weight: 800;">{{pokemon.pokemon['defense']}}</p>
+                </div>
+                <div class="cardstats" style="padding: 0px; margin: 0px; font-size: small;">
+                    <h9 style="padding: 0px; margin: 0px;">{{pokemon.pokemon['type1']|capitalize}} {% if
+                        pokemon.pokemon['type2'] %} /
+                        {{pokemon.pokemon['type2']|capitalize}} {% endif %}</h9>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush" style="">
+                <li class="list-group-item"
+                    style=" font-weight: 800; padding-top: 5px; padding-bottom: 5px; padding-left: 8px;">
+                    Abilities</li>
+                <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">
+                    {{pokemon.pokemon['ability1']|capitalize}}</li>
+                <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">
+                    {{pokemon.pokemon['ability2']|capitalize}}</li>
+            </ul>
+            <div class="card-body" style="display: flex; justify-content:space-around;">
+                <a href="/training/remove/{{ pokemon.team_id }}/{{ pokemon.mypoke_id }}" style="height: max-content;" type="button" class="btn btn-secondary release">Remove From Team</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

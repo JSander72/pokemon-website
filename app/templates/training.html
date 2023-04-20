@@ -12,21 +12,23 @@
       My Teams
     </button>
     <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item" href="#">team1</a></li>
-      <li><a class="dropdown-item" href="#">Another action</a></li>
-      <li><a class="dropdown-item" href="#">Something else here</a></li>
+        {% for team in myteams %}
+            <li><a class="dropdown-item" href="/training/viewteam/{{ team.id }}">{{team.team_name}}</a></li>
+        {% endfor %}
       <li><hr class="dropdown-divider"></li>
       <li><a class="dropdown-item" href="/training">View All Pokemon</a></li>
       <li><a class="dropdown-item btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#newteammodal">Create a New Team</a></li>
     </ul>
   </div>
 
+
+
 <!-- New Team Model -->
   <div class="modal" tabindex="-1" id="newteammodal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">Create New Team</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="{{ url_for('newTeam') }}" method="POST">
@@ -41,19 +43,7 @@
       </div>
     </div>
   </div>
-  
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-      <div style="display: flex; justify-content: center; font-size: 15px;">
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }} text-bg-{{ category }} alert-dismissible fade show" role="alert">
-              {{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          {% endfor %}
-      </div>
-  {% endif %}
-{% endwith %}
+
 </div>
 
 <div style="display: flex; flex-wrap: wrap-reverse; justify-content: center;">
@@ -105,7 +95,18 @@
       </ul>
       <div class="card-body" style="display: flex; justify-content:space-around;">
         <a href="/traning/release/{{ pokemon['id'] }}" style="height: max-content;" type="button" class="btn btn-secondary release">Release</a>
-        <a href="#" style="height: max-content;" type="button" class="btn btn-secondary">Add to team</a>
+        <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Add to Team
+            </a>
+          
+            <ul class="dropdown-menu">
+            {% for team in myteams %}
+                <li><a class="dropdown-item" href='/training/addtoteam/{{ team.id }}/{{ pokemon["poke_id"] }}/{{ pokemon.id }}'>{{team.team_name}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+          
       </div>
     </div>
   </div>

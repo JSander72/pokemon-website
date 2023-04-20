@@ -108,10 +108,27 @@ def capture():
 
 @app.route('/training')
 @login_required
-def pokeTeams():
+def caughtPokemon():
     user = User.query.filter_by(id=current_user.id).first()
     mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
-    return render_template('training.html', mypokemons=mypokemons)
+
+    myteams = Teams.query.filter_by(user_id=user.id).all() #get all the teams a user has created
+
+    return render_template('training.html', mypokemons=mypokemons, myteams=myteams)
+
+@app.route('/training/viewteam/<int:id>') #id here is the specific team id from Teams table
+def viewTeam(id):  
+    teampokemon = TeamPokemon.query.filter_by(team_id=id).all() #access to the pokemon on a specific team
+    teamname = Teams.query.filter_by(id=id).first() #access to team name
+    myteams = Teams.query.filter_by(user_id=current_user.id).all() #get all the teams a user has created
+    print(teamname)
+    print(teampokemon)
+    if len(teampokemon) == 0:
+        flash(f"You don't have any pokemon in {teamname.team_name}", "danger")
+        return redirect(url_for('caughtPokemon'))
+    else:
+        return render_template('teams.html', teamname=teamname, teampokemon=teampokemon, myteams=myteams)
+
 
 @app.route('/traning/release/<int:id>', methods=['GET'])
 @login_required
@@ -119,12 +136,38 @@ def releasePokemon(id):
     pokemon = MyPokemon.query.get(id)
     pokemon.deleteFromDB()
     flash("Pokemon successfully released!", "success")
-    return redirect(url_for('pokeTeams'))
+    return redirect(url_for('caughtPokemon'))
 
 @app.route('/training/createteam', methods=["POST"])
 def newTeam():
     teamname = request.form['teamname']
     newteam = Teams(current_user.id, teamname)
     newteam.saveToDB()
-    flash(f"{newteam} has been created!", 'success')
+    flash(f"{newteam.team_name} has been created!", 'success')
+    return redirect('/training')
+
+@app.route('/training/addtoteam/<int:teamid>/<int:pokeid>/<int:mypokeid>')
+def addToTeam(teamid, pokeid, mypokeid):
+    teams = TeamPokemon.query.filter_by(mypoke_id=mypokeid).first()
+    if teams:
+        flash("That Pokemon is already in a team!", 'danger')
+        return redirect('/training')
+    else:
+        team_member = TeamPokemon(pokeid, teamid, mypokeid)
+        team_member.saveToDB()
+
+        teamname = Teams.query.filter_by(id=teamid).first() #access to team name
+
+        flash(f"Pokemon successfully added to {teamname.team_name}!", "success")
+        return redirect('/training')
+
+@app.route('/training/remove/<int:teamid>/<int:mypokeid>')
+def removeFromTeam(teamid, mypokeid):
+    team_member = TeamPokemon.query.filter_by(mypoke_id=mypokeid).first() #access to a pokemon on a specific team
+    team_member.deleteFromDB()
+
+    team = Teams.query.filter_by(id=teamid).first() #access to team
+    teamname = team.team_name
+
+    flash(f"Pokemon successfully removed from {teamname}!", "success")
     return redirect('/training')

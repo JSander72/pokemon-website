@@ -22,6 +22,7 @@ def signUp():
             print(user)
             user.saveToDB()
             print(user)
+            flash("Account successfully created!", 'success')
             return redirect(url_for('auth.loginPage'))
 
     return render_template('signup.html', form = form)
