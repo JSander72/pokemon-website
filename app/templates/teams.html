@@ -6,20 +6,63 @@
     <p></p>
     <p style="font-size:large;">This is {{ teamname.team_name }}!</p>
 
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          My Teams
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark">
-            {% for team in myteams %}
+    <div style="display: flex; justify-content: center;">
+        <div class="dropdown" style="padding-right: 15px;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                My Teams
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                {% for team in myteams %}
                 <li><a class="dropdown-item" href="/training/viewteam/{{ team.id }}">{{team.team_name}}</a></li>
-            {% endfor %}
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="/training">View All Pokemon</a></li>
-          <li><a class="dropdown-item btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#newteammodal">Create a New Team</a></li>
-        </ul>
-      </div>
+                {% endfor %}
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/training">View All Pokemon</a></li>
+                <li><a class="dropdown-item btn btn-primary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#newteammodal">Create a New Team</a></li>
+            </ul>
+        </div>
+
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#battlemodal">
+            Battle!
+        </button>
+
+        <!-- <a href="#" class="animated-button1">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Button
+          </a> -->
+    </div>
 </div>
+
+<!-- battle modal -->
+<div class="modal fade" id="battlemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="battlemodal">Choose a player to battle!</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="list-group">
+                {% for user in allusers %}
+                <a class="dropdown-item" href="#">{{user.username}}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+
 
 <!-- New Team Model -->
 <div class="modal" tabindex="-1" id="newteammodal">
@@ -103,7 +146,8 @@
                     {{pokemon.pokemon['ability2']|capitalize}}</li>
             </ul>
             <div class="card-body" style="display: flex; justify-content:space-around;">
-                <a href="/training/remove/{{ pokemon.team_id }}/{{ pokemon.mypoke_id }}" style="height: max-content;" type="button" class="btn btn-secondary release">Remove From Team</a>
+                <a href="/training/remove/{{ pokemon.team_id }}/{{ pokemon.mypoke_id }}" style="height: max-content;"
+                    type="button" class="btn btn-secondary release">Remove From Team</a>
             </div>
         </div>
     </div>

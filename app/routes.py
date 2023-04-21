@@ -4,14 +4,19 @@ from .forms import PokeDex
 import requests as r
 from .models import MyPokemon, Pokemon, TeamPokemon, Teams, User
 from flask_login import login_required, current_user
+import random as ran
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+
+    allpokemons = ran.sample(list(Pokemon.query.all()), 4)
+
+    return render_template('index.html', allpokemons=allpokemons)
 
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    allpokemons = ran.sample(list(Pokemon.query.all()), 4)
+    return render_template('index.html', allpokemons=allpokemons)
 
 @app.route('/pokedex', methods=['GET', 'POST'])
 def poke():
@@ -105,16 +110,25 @@ def capture():
     else:
         print('Something is still not right')
 
+@app.route('/index/capture/<int:pokeid>')
+@login_required
+def indexCapture(pokeid):
+    indexcapture = MyPokemon(user_id=current_user.id,poke_id=pokeid)
+    indexcapture.saveToDB()
+    pokemon = Pokemon.query.filter_by(id=pokeid).first()
+    flash(f'You captured {pokemon.name}!!', 'success')
+    return redirect(url_for('index'))
 
 @app.route('/training')
 @login_required
 def caughtPokemon():
     user = User.query.filter_by(id=current_user.id).first()
     mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
+    userteams = TeamPokemon.query.all()
 
     myteams = Teams.query.filter_by(user_id=user.id).all() #get all the teams a user has created
 
-    return render_template('training.html', mypokemons=mypokemons, myteams=myteams)
+    return render_template('training.html', mypokemons=mypokemons, myteams=myteams, userteams=userteams)
 
 @app.route('/training/viewteam/<int:id>') #id here is the specific team id from Teams table
 def viewTeam(id):  
@@ -123,11 +137,16 @@ def viewTeam(id):
     myteams = Teams.query.filter_by(user_id=current_user.id).all() #get all the teams a user has created
     print(teamname)
     print(teampokemon)
+
+    #for choosing an opponent
+    allusers = User.query.all()
+
+
     if len(teampokemon) == 0:
         flash(f"You don't have any pokemon in {teamname.team_name}", "danger")
         return redirect(url_for('caughtPokemon'))
     else:
-        return render_template('teams.html', teamname=teamname, teampokemon=teampokemon, myteams=myteams)
+        return render_template('teams.html', teamname=teamname, teampokemon=teampokemon, myteams=myteams, allusers=allusers)
 
 
 @app.route('/traning/release/<int:id>', methods=['GET'])
@@ -149,8 +168,12 @@ def newTeam():
 @app.route('/training/addtoteam/<int:teamid>/<int:pokeid>/<int:mypokeid>')
 def addToTeam(teamid, pokeid, mypokeid):
     teams = TeamPokemon.query.filter_by(mypoke_id=mypokeid).first()
+    already5 = TeamPokemon.query.filter_by(team_id=teamid).all()
     if teams:
         flash("That Pokemon is already in a team!", 'danger')
+        return redirect('/training')
+    elif len(already5) == 4:    #sets max team length
+        flash("That team already has 4 Pokemon!", 'danger')
         return redirect('/training')
     else:
         team_member = TeamPokemon(pokeid, teamid, mypokeid)
@@ -163,6 +186,7 @@ def addToTeam(teamid, pokeid, mypokeid):
 
 @app.route('/training/remove/<int:teamid>/<int:mypokeid>')
 def removeFromTeam(teamid, mypokeid):
+
     team_member = TeamPokemon.query.filter_by(mypoke_id=mypokeid).first() #access to a pokemon on a specific team
     team_member.deleteFromDB()
 
@@ -171,3 +195,21 @@ def removeFromTeam(teamid, mypokeid):
 
     flash(f"Pokemon successfully removed from {teamname}!", "success")
     return redirect('/training')
+
+@app.route('/battle/<int:myteamid>/<int:opponentid>')
+def battlestart(myteamid, opponentid):
+
+    myteam = TeamPokemon.query.filter_by(team_id=myteamid).all() #all pokemon on my chosen team
+
+    enemyteams = Teams.query.filter_by(user_id=opponentid).all() #all teams associated with opponent user id
+
+
+
+    user = User.query.filter_by(id=current_user.id).first()
+    mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
+    myteams = Teams.query.filter_by(user_id=user.id).all() #get all the teams a user has created
+
+    allusers = User.query.all()
+
+
+    return render_template('battle.html', myteam=myteam)

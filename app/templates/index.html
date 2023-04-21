@@ -1,59 +1,85 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 id="signuptitle">Welcome to the Home Page</h1>
+<h1 id="signuptitle">POKEMON BATTLE!!</h1>
 
-<h1>Hello, {{ current_user.username }}!</h1>
-
-<div class="card_container" style="display: flex; justify-content: center;">
-    <div class="maincard" style="border: 2px solid black; height: 450px; width: 250px; max-width: ;">
-        <div style="display: flex; justify-content: space-between; padding: 2%;">
-            <h5>Pokemon</h5>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
-            <h6>EXP</h6>
-            <h5>60</h5>
-            <p></p>
-            <h6>HP</h5>
-                <h5>120</h5>
-        </div>
-    </div>
+<div style="display: flex; justify-content: center; padding-top: 20px;">
+<h1>Hello, {{ current_user.username }}! Get ready for battle!</h1>
 </div>
 
-<div class="card_container" style="display: flex; justify-content: center;">
-<div class="flip-card">
-    <div class="flip-card-inner">
-        <div class="flip-card-front">
-            
-                <div class="maincard" style="border: 2px solid black; height: 450px; width: 250px; max-width: ;">
-                    <div style="display: flex; justify-content: space-between; padding: 2%;">
-                        <h5>Pokemon</h5>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <h6>EXP</h6>
-                        <h5>60</h5>
-                        <p></p>
-                        <h6>HP</h5>
-                            <h5>120</h5>
-                    </div>
+<div style="display: flex; align-items: center; flex-direction: column; padding-bottom: 20px;">
+    <p></p>
+    <p style="font-size:large;">Check these featured Pokemon that other users have caught!</p>
+  </div>
+
+<div style="display: flex; flex-wrap: wrap-reverse; justify-content: center;">
+    {% for pokemon in allpokemons %}
+    <div class="pokecard" style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px;">
+        <div class="card" style="width: 18rem; ">
+            <div class="card_top">
+                <h5 class="card-title" style="font-weight: 800;">{{pokemon['name']|capitalize}}</h5>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p style="font-size: small;">EXP</p>
+                <p style="font-weight: 800;">{{pokemon["exp"]}}</p>
+                <p></p>
+                <p style="margin-right: 0; font-size: small;">HP
+                <p style="font-weight: 800;">{{pokemon["hp"]}}</p>
+                </p>
+            </div>
+            <img src="{{pokemon['poke_img']}}" class="card-img-top pokeimage"
+                alt="{{pokemon['name']|capitalize}}" style="width:250px; height: 230px;">
+            <div class="card-body cardstats" style=" padding: 8px; padding-bottom: 0;">
+                <div class="cardstats" style="display: flex; justify-content: space-between;">
+                    <p class="card-text" style="font-weight: 800;">Pokémon #{{pokemon["poke_id"]}}</p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p style="font-size: small;">ATK</p>
+                    <p style="font-weight: 800;">{{pokemon['attack']}}</p>
+                    <p></p>
+                    <p style="font-size: small;">DEF</p>
+                    <p style="font-weight: 800;">{{pokemon['defense']}}</p>
                 </div>
-            
-
-
-        </div>
-        <div class="flip-card-back">
-            <img src="{{ url_for('static', filename='test2.jpg') }}" alt="" height="477" width="288">
+                <div class="cardstats" style="padding: 0px; margin: 0px; font-size: small;">
+                    <h9 style="padding: 0px; margin: 0px;">{{pokemon['type1']|capitalize}} {% if
+                        pokemon['type2'] %} /
+                        {{pokemon['type2']|capitalize}} {% endif %}</h9>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush" style="">
+                <li class="list-group-item"
+                    style=" font-weight: 800; padding-top: 5px; padding-bottom: 5px; padding-left: 8px;">
+                    Abilities</li>
+                <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">
+                    {{pokemon['ability1']|capitalize}}</li>
+                <li class="list-group-item" style=" font-weight: 600; padding-top: 5px; padding-bottom: 5px;">
+                    {{pokemon['ability2']|capitalize}}</li>
+            </ul>
+            <div class="card-body" style="display: flex; justify-content: center;">
+                <a href="/index/capture/{{ pokemon.id }}" type="button" class="btn btn-secondary">Capture</a>
+                <!-- <a href="#" class="card-link">Another link</a> -->
+            </div>
         </div>
     </div>
-</div>
+    {% endfor %}
 </div>
 
+
+<!-- -------------------------------- -->
 
 
 {% endblock %}

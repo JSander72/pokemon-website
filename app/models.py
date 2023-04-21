@@ -71,6 +71,7 @@ class Teams(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False, autoincrement = False)
     team_name = db.Column(db.String(50), nullable = False)
+    # pokemon = db.relationship('Team_Pokemon')
 
     def __init__(self, user_id, team_name):
         self.user_id = user_id

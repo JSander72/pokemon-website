@@ -42,9 +42,9 @@ def loginPage():
                     login_user(user)
                     return redirect(url_for('index'))
                 else:
-                    print('invalid password')
+                    flash('invalid password', 'danger')
             else:
-                print('incorrect username or password')
+                flash('incorrect username or password', 'danger')
 
     return render_template('login.html', form = form)
 

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 id="signuptitle">Battle!</h1>
+<div style="display: flex; align-items: center; flex-direction: column;">
+    <p></p>
+    <p style="font-size:large;">Choose a team to fight with and a player to battle.</p>
+</div>
+
+
+<div class="battle_container" style="display: flex; justify-content: space-between;">
+
+    <div class="your_side">
+        <h1 id="signuptitle">Choose your battle team!</h1>
+
+        <div class="list-group">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Choose your battle team!
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                {% for team in myteams %}
+                <li><a class="dropdown-item" href="/training/viewteam/{{ team.id }}">{{team.team_name}}</a></li>
+                {% endfor %}
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/training">View All Pokemon</a></li>
+                <li><a class="dropdown-item btn btn-primary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#newteammodal">Create a New Team</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <div class="battle_arena">
+        <h1 id="signuptitle">Battle Arena</h1>
+    </div>
+
+
+    <div class="opponent_side">
+        <h1 id="signuptitle">Choose your opponent!</h1>
+        <div class="list-group">
+            {% for user in allusers %}
+            <a class="dropdown-item" href="#">{{user.username}}</a>
+            {% endfor %}
+        </div>
+
+
+
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Choose your opponent!
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                {% for user in allusers %}
+                <li><a class="dropdown-item" href="#">{{user.username}}</a></li>
+                {% endfor %}
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/training">View All Pokemon</a></li>
+                <li><a class="dropdown-item btn btn-primary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#newteammodal">Create a New Team</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% endblock %}
