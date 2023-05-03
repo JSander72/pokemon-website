@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, get_flashed_messages, redirect, render_template, request, url_for
+from flask import Blueprint, flash, get_flashed_messages, redirect, render_template, request, session, url_for
 from .forms import LogIn, SignUpForm
 from ..models import User, Pokemon
 from flask_login import current_user, login_user, logout_user, login_required
@@ -40,6 +40,7 @@ def loginPage():
                 # verify password
                 if user.password == password:
                     login_user(user)
+                    session['logged_in'] = True
                     return redirect(url_for('index'))
                 else:
                     flash('invalid password', 'danger')
@@ -53,6 +54,7 @@ def loginPage():
 def logMeOut():
     logout_user()
     flash("You've successfully been logged out!", 'success')
+    session['logged_in'] = False
     return redirect(url_for('auth.loginPage'))
 
 @auth.route('/myaccount')
@@ -69,12 +71,12 @@ def deleteUser():
     flash("Delete user successful!!", 'success')
     return redirect(url_for('index'))
 
-@auth.route('/deleteme', methods=["GET"]) #Just for me to get rid of pokemon
-def deletePokemon():
-    # query all pokemon and delete them
-    Pokemon.query.delete()
+# @auth.route('/deleteme', methods=["GET"]) #Just for me to get rid of pokemon
+# def deletePokemon():
+#     # query all pokemon and delete them
+#     Pokemon.query.delete()
     
-    # commit the changes to the database
-    db.session.commit()
+#     # commit the changes to the database
+#     db.session.commit()
 
-    return redirect(url_for('index'))
+#     return redirect(url_for('index'))

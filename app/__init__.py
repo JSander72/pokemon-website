@@ -18,6 +18,8 @@ def load_user(user_id):
 
 login_manager.login_view = 'auth.loginPage'
 
+
+
 ##register your blueprint
 app.register_blueprint(auth)
 

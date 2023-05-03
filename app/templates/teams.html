@@ -90,8 +90,16 @@
 
 <div style="display: flex; flex-wrap: wrap-reverse; justify-content: center;">
     {% for pokemon in teampokemon %}
-    <div class="pokecard" style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px;">
-        <div class="card" style="width: 18rem; ">
+        <div class="pokecard" style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px;">
+        {% if pokemon.pokemon['type1'] =="fire" %} 
+            <div class="card"style="width: 18rem; background-image: linear-gradient(to bottom right,rgb(206, 0, 12), rgb(226, 12, 22), rgb(229 ,84, 36), rgb(245, 221, 199),  rgb(229 ,84, 36), rgb(226, 12, 22))">
+        {% elif pokemon.pokemon['type1'] == "grass" %}
+            <div class="card"style="width: 18rem; background-image: linear-gradient(to bottom right,rgb(16, 123, 41), rgb(23, 158, 43), rgb(106, 185, 39), rgb(233, 249, 193),  rgb(106, 185, 39), rgb(23, 158, 43))">
+        {% elif pokemon.pokemon['type1'] == "water" %}
+            <div class="card"style="width: 18rem; background-image: linear-gradient(to bottom right,rgb(7, 73, 210), rgb(16, 122, 210), rgb(58, 182, 233), rgb(216, 246, 251),rgb(58, 182, 233), rgb(16, 122, 210));">
+        {% else %}
+            <div class="card" style="width: 18rem;">
+        {% endif %}
             <div class="card_top">
                 <h5 class="card-title" style="font-weight: 800;">{{pokemon.pokemon['name']|capitalize}}</h5>
                 <p></p>

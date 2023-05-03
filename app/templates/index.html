@@ -3,9 +3,15 @@
 {% block content %}
 <h1 id="signuptitle">POKEMON BATTLE!!</h1>
 
+{% if session.logged_in %}
 <div style="display: flex; justify-content: center; padding-top: 20px;">
 <h1>Hello, {{ current_user.username }}! Get ready for battle!</h1>
 </div>
+{% else %}
+<div style="display: flex; justify-content: center; padding-top: 20px;">
+    <h1>Hello! Sign up or log in and get ready for battle!</h1>
+    </div>
+{% endif %}
 
 <div style="display: flex; align-items: center; flex-direction: column; padding-bottom: 20px;">
     <p></p>
@@ -15,7 +21,15 @@
 <div style="display: flex; flex-wrap: wrap-reverse; justify-content: center;">
     {% for pokemon in allpokemons %}
     <div class="pokecard" style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px;">
-        <div class="card" style="width: 18rem; ">
+        {% if pokemon['type1'] =="fire" %} 
+            <div class="card"style="width: 18rem; background-image: linear-gradient(to bottom right,rgb(206, 0, 12), rgb(226, 12, 22), rgb(229 ,84, 36), rgb(245, 221, 199),  rgb(229 ,84, 36), rgb(226, 12, 22))">
+        {% elif pokemon['type1'] == "grass" %}
+            <div class="card"style="width: 18rem; background-image: linear-gradient(to bottom right,rgb(16, 123, 41), rgb(23, 158, 43), rgb(106, 185, 39), rgb(233, 249, 193),  rgb(106, 185, 39), rgb(23, 158, 43))">
+        {% elif pokemon['type1'] == "water" %}
+            <div class="card"style="width: 18rem; background-image: linear-gradient(to bottom right,rgb(7, 73, 210), rgb(16, 122, 210), rgb(58, 182, 233), rgb(216, 246, 251),rgb(58, 182, 233), rgb(16, 122, 210));">
+        {% else %}
+            <div class="card" style="width: 18rem;">
+        {% endif %}
             <div class="card_top">
                 <h5 class="card-title" style="font-weight: 800;">{{pokemon['name']|capitalize}}</h5>
                 <p></p>
@@ -55,9 +69,9 @@
                     <p style="font-weight: 800;">{{pokemon['defense']}}</p>
                 </div>
                 <div class="cardstats" style="padding: 0px; margin: 0px; font-size: small;">
-                    <h9 style="padding: 0px; margin: 0px;">{{pokemon['type1']|capitalize}} {% if
+                    <h6 style="padding: 0px; margin: 0px;">{{pokemon['type1']|capitalize}} {% if
                         pokemon['type2'] %} /
-                        {{pokemon['type2']|capitalize}} {% endif %}</h9>
+                        {{pokemon['type2']|capitalize}} {% endif %}</h6>
                 </div>
             </div>
             <ul class="list-group list-group-flush" style="">

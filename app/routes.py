@@ -125,6 +125,7 @@ def caughtPokemon():
     user = User.query.filter_by(id=current_user.id).first()
     mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
     userteams = TeamPokemon.query.all()
+    
 
     myteams = Teams.query.filter_by(user_id=user.id).all() #get all the teams a user has created
 
@@ -140,6 +141,7 @@ def viewTeam(id):
 
     #for choosing an opponent
     allusers = User.query.all()
+
 
 
     if len(teampokemon) == 0:
@@ -201,15 +203,20 @@ def battlestart(myteamid, opponentid):
 
     myteam = TeamPokemon.query.filter_by(team_id=myteamid).all() #all pokemon on my chosen team
 
-    enemyteams = Teams.query.filter_by(user_id=opponentid).all() #all teams associated with opponent user id
+    enemyteams = [team.id for team in Teams.query.filter_by(user_id=opponentid).all()] #all teams associated with opponent user id
+
+    if enemyteams:
+        enemyteam =ran.choice(enemyteams)
+        pass
+    else:
+        return flash("Oh, no! That user doen't seem to have any teams!")
+    
+    enemypokemon = session.query(TeamPokemon.poke_id).filter_by(team_id = enemyteam)
 
 
+    # user = User.query.filter_by(id=current_user.id).first()
 
-    user = User.query.filter_by(id=current_user.id).first()
-    mypokemons = MyPokemon.query.filter_by(user_id=user.id).all()
-    myteams = Teams.query.filter_by(user_id=user.id).all() #get all the teams a user has created
-
-    allusers = User.query.all()
+    # allusers = User.query.all()
 
 
     return render_template('battle.html', myteam=myteam)
